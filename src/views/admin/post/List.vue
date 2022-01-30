@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import AdminSideBar from '../../components/layouts/AdminSideBar.vue';
+import AdminSideBar from '../../../components/layouts/AdminSideBar.vue';
 import { mapActions, mapState } from 'vuex';
 import Swal from 'sweetalert2';
 

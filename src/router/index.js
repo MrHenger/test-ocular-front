@@ -27,7 +27,7 @@ const routes = [
   {
     path: '/admin/post',
     name: 'adminPost',
-    component: () => import('../views/admin/Post.vue'),
+    component: () => import('../views/admin/post/List.vue'),
   },
 ];
 
