@@ -41,7 +41,7 @@
                     <v-icon @click="editPost(item)">mdi-pencil</v-icon>
                   </v-btn>
                   <v-btn outlined small fab color="#DC3545">
-                    <v-icon @click="destroyePost(item, page)"> mdi-delete </v-icon>
+                    <v-icon @click="destroyePost(item)"> mdi-delete </v-icon>
                   </v-btn>
                 </div>
               </template>
@@ -56,6 +56,7 @@
 <script>
 import AdminSideBar from '../../components/layouts/AdminSideBar.vue';
 import { mapActions, mapState } from 'vuex';
+import Swal from 'sweetalert2';
 
 export default {
   components: {
@@ -112,7 +113,23 @@ export default {
     }),
   },
   methods: {
-    ...mapActions('post', ['getPosts']),
+    ...mapActions('post', ['getPosts', 'deletePost']),
+    destroyePost(post) {
+      Swal.fire({
+        icon: 'warning',
+        title: '¿Seguro que quiere eliminar esta publicación?',
+        text: 'esta opción es irreversible',
+        showCancelButton: true,
+        iconColor: '#FFC107',
+        confirmButtonText: 'Eliminar',
+        confirmButtonColor: '#DC3545',
+        cancelButtonText: 'Cancelar',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.deletePost(post);
+        }
+      });
+    },
   },
 };
 </script>
