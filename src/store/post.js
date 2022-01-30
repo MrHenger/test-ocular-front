@@ -6,24 +6,38 @@ export default {
   state: () => ({
     posts: [],
     editPost: {},
+    paginate: {},
+    page: 1,
+    loading: false,
   }),
   mutations: {
     setPost(state, data) {
-      state.posts = data;
+      state.posts = data.data;
+      state.paginate = data.meta;
     },
     setEditPost(state, data) {
       state.editPost = data;
     },
+    setLoading(state, data) {
+      state.loading = data;
+    },
+    setPage(state, page) {
+      state.page = page;
+    },
   },
   actions: {
-    getPosts(contex) {
+    getPosts(contex, page) {
+      contex.commit('setLoading', true);
       axios
-        .get('/admin/post')
+        .get(`/admin/post?page=${page}`)
         .then((res) => {
-          contex.commit('setPost', res.data.data);
+          contex.commit('setPost', res.data);
         })
         .catch((error) => {
           console.log(error);
+        })
+        .finally(() => {
+          contex.commit('setLoading', false);
         });
     },
     deletePost(contex, post) {

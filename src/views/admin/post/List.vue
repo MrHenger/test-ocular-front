@@ -8,8 +8,8 @@
         <div class="pa-6">
           <span class="font-weight-bold text-h4">Listado de publicaciones</span>
         </div>
-        <v-row class="d-flex justify-center">
-          <v-col class="px-10">
+        <v-row class="d-flex justify-center px-10">
+          <v-col>
             <v-data-table
               :headers="headers"
               :items="posts"
@@ -17,6 +17,8 @@
               class="elevation-1"
               hide-default-footer
               disable-sort
+              :loading="loading"
+              loading-text="Cargando datos"
             >
               <template v-slot:item.miniature="{ item }">
                 <div class="d-flex justify-center">
@@ -41,7 +43,7 @@
                     <v-icon @click="editPost(item)">mdi-pencil</v-icon>
                   </v-btn>
                   <v-btn outlined small fab color="#DC3545">
-                    <v-icon @click="destroyePost(item)"> mdi-delete </v-icon>
+                    <v-icon @click="destroyePost(item, page)"> mdi-delete </v-icon>
                   </v-btn>
                 </div>
               </template>
@@ -49,6 +51,14 @@
             <v-dialog v-model="dialog" max-width="800" persistent>
               <edit-post v-on:cancel="dialog = false" v-on:save="saveEvent()"></edit-post>
             </v-dialog>
+          </v-col>
+          <v-col cols="12" class="d-flex justify-end text-right">
+            <v-pagination
+              v-model="page"
+              :total-visible="5"
+              @input="changePage()"
+              :length="paginate ? paginate.last_page : 1"
+            ></v-pagination>
           </v-col>
         </v-row>
       </v-col>
@@ -107,20 +117,35 @@ export default {
         },
       ],
       dialog: false,
+      page: 1,
     };
   },
   created() {
     this.getPosts();
   },
+  watch: {
+    currentPage() {
+      this.page = this.currentPage;
+    },
+  },
   computed: {
     ...mapState('post', {
       posts: (state) => state.posts,
     }),
+    ...mapState('post', {
+      paginate: (state) => state.paginate,
+    }),
+    ...mapState('post', {
+      currentPage: (state) => state.page,
+    }),
+    ...mapState('post', {
+      loading: (state) => state.loading,
+    }),
   },
   methods: {
     ...mapActions('post', ['getPosts', 'deletePost']),
-    ...mapMutations('post', ['setEditPost']),
-    destroyePost(post) {
+    ...mapMutations('post', ['setEditPost', 'setPage']),
+    destroyePost(post, page) {
       Swal.fire({
         icon: 'warning',
         title: '¿Seguro que quiere eliminar esta publicación?',
@@ -132,6 +157,12 @@ export default {
         cancelButtonText: 'Cancelar',
       }).then((result) => {
         if (result.isConfirmed) {
+          if (this.posts?.length == 1) {
+            if (page > 1) {
+              page -= 1;
+              this.setPage(page);
+            }
+          }
           this.deletePost(post);
         }
       });
@@ -143,6 +174,10 @@ export default {
     saveEvent() {
       this.dialog = false;
       this.getPosts();
+    },
+    changePage() {
+      this.setPage(this.page);
+      this.getPosts(this.page);
     },
   },
 };
