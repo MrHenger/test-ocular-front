@@ -5,10 +5,14 @@ export default {
   namespaced: true,
   state: () => ({
     posts: [],
+    editPost: {},
   }),
   mutations: {
     setPost(state, data) {
       state.posts = data;
+    },
+    setEditPost(state, data) {
+      state.editPost = data;
     },
   },
   actions: {

@@ -46,6 +46,9 @@
                 </div>
               </template>
             </v-data-table>
+            <v-dialog v-model="dialog" max-width="800" persistent>
+              <edit-post v-on:cancel="dialog = false" v-on:save="saveEvent()"></edit-post>
+            </v-dialog>
           </v-col>
         </v-row>
       </v-col>
@@ -55,12 +58,14 @@
 
 <script>
 import AdminSideBar from '../../../components/layouts/AdminSideBar.vue';
-import { mapActions, mapState } from 'vuex';
+import { mapActions, mapMutations, mapState } from 'vuex';
 import Swal from 'sweetalert2';
+import EditPost from '../../../components/post/EditPost.vue';
 
 export default {
   components: {
     AdminSideBar,
+    EditPost,
   },
   data() {
     return {
@@ -101,11 +106,11 @@ export default {
           class: 'font-weight-bold',
         },
       ],
+      dialog: false,
     };
   },
   created() {
     this.getPosts();
-    console.log(this.posts);
   },
   computed: {
     ...mapState('post', {
@@ -114,6 +119,7 @@ export default {
   },
   methods: {
     ...mapActions('post', ['getPosts', 'deletePost']),
+    ...mapMutations('post', ['setEditPost']),
     destroyePost(post) {
       Swal.fire({
         icon: 'warning',
@@ -129,6 +135,14 @@ export default {
           this.deletePost(post);
         }
       });
+    },
+    editPost(post) {
+      this.setEditPost(Object.assign({}, post));
+      this.dialog = true;
+    },
+    saveEvent() {
+      this.dialog = false;
+      this.getPosts();
     },
   },
 };
