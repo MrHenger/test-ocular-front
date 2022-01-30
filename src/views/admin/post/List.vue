@@ -25,20 +25,19 @@
                   <v-img max-width="60" max-height="40" :src="item.image.fullPatch"></v-img>
                 </div>
               </template>
-
               <template v-slot:item.enabled="{ item }">
                 <span v-if="item.enabled">Activada</span>
                 <span v-else>Desactivada</span>
               </template>
-
               <template v-slot:item.publicationDate="{ item }">
                 <span v-if="item.publicationDate">{{ item.publicationDate }}</span>
                 <span v-else>Sin publicar</span>
               </template>
-
               <template v-slot:item.actions="{ item }">
                 <div class="btn-min-width mx-auto">
-                  <v-btn outlined small fab color="#2E7D32"><v-icon>mdi-eye</v-icon></v-btn>
+                  <v-btn outlined :disabled="!item.enabled" small fab color="#2E7D32"
+                    ><v-icon @click="showPost(item)">mdi-eye</v-icon></v-btn
+                  >
                   <v-btn class="mx-1" outlined small fab color="#FFC107">
                     <v-icon @click="editPost(item)">mdi-pencil</v-icon>
                   </v-btn>
@@ -178,6 +177,9 @@ export default {
     changePage() {
       this.setPage(this.page);
       this.getPosts(this.page);
+    },
+    showPost(post) {
+      this.$router.push({ name: 'postShow', params: { id: post.id } });
     },
   },
 };
