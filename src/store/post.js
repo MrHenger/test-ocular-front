@@ -9,9 +9,10 @@ export default {
     paginate: {},
     page: 1,
     loading: false,
+    post: {},
   }),
   mutations: {
-    setPost(state, data) {
+    setPosts(state, data) {
       state.posts = data.data;
       state.paginate = data.meta;
     },
@@ -24,6 +25,9 @@ export default {
     setPage(state, page) {
       state.page = page;
     },
+    setPost(state, data) {
+      state.post = data;
+    },
   },
   actions: {
     getPosts(contex, page) {
@@ -31,7 +35,7 @@ export default {
       axios
         .get(`/admin/post?page=${page}`)
         .then((res) => {
-          contex.commit('setPost', res.data);
+          contex.commit('setPosts', res.data);
         })
         .catch((error) => {
           console.log(error);
@@ -56,6 +60,19 @@ export default {
               showCloseButton: true,
             });
             contex.dispatch('getPosts');
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    getPost(contex, id) {
+      axios
+        .get(`/post/${id}`)
+        .then((res) => {
+          if (res.status == 200) {
+            console.log(res.data.data);
+            contex.commit('setPost', res.data.data);
           }
         })
         .catch((error) => {

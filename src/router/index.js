@@ -29,6 +29,11 @@ const routes = [
     name: 'adminPost',
     component: () => import('../views/admin/post/List.vue'),
   },
+  {
+    path: '/post/:id',
+    name: 'postShow',
+    component: () => import('../views/post/ShowPost.vue'),
+  },
 ];
 
 const router = new VueRouter({

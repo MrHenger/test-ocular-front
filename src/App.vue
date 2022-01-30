@@ -33,7 +33,7 @@
       </v-btn>
     </v-app-bar> -->
 
-    <v-main>
+    <v-main style="background-color: #f8f8f8">
       <router-view />
     </v-main>
   </v-app>
