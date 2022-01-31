@@ -17,6 +17,7 @@
                 <span class="white--text">{{ authme.email }}</span>
               </v-col>
               <v-col cols="12" class="d-flex justify-center pb-0">
+                <v-btn class="mr-2" outlined dark @click="toHome()"><span>Home</span></v-btn>
                 <v-btn outlined dark @click="logout()"><span>Logout</span></v-btn>
               </v-col>
             </v-row>
@@ -74,6 +75,9 @@ export default {
         .catch((error) => {
           console.log(error);
         });
+    },
+    toHome() {
+      this.$router.push({ name: 'Home' });
     },
   },
 };
