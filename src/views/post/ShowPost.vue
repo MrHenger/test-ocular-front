@@ -5,9 +5,19 @@
         <v-card>
           <v-container>
             <v-row class="px-6 py-8">
-              <a @click="backDashboard()" v-if="isAuth"
+              <v-col>
+                <v-row>
+                  <v-col class="d-flex justify-space-between pt-0">
+                    <a @click="toHome()"><v-icon>mdi-arrow-left</v-icon> Ir al home</a>
+                    <a @click="toDashboard()" v-if="isAuth">
+                      Ir al dashboard <v-icon>mdi-arrow-right</v-icon>
+                    </a>
+                  </v-col>
+                </v-row>
+              </v-col>
+              <!-- <a @click="backDashboard()" v-if="isAuth"
                 ><v-icon>mdi-arrow-left</v-icon> volver al dashboar</a
-              >
+              > -->
               <v-col cols="12" class="pb-0">
                 <span class="font-weight-bold text-h3">{{ post.title }}</span>
               </v-col>
@@ -54,8 +64,11 @@ export default {
     },
   },
   methods: {
-    backDashboard() {
+    toDashboard() {
       this.$router.push({ name: 'adminPost' });
+    },
+    toHome() {
+      this.$router.push({ name: 'Home' });
     },
     getPost(id) {
       this.$axios
