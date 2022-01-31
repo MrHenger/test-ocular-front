@@ -30,7 +30,7 @@
                 <span v-else>Desactivada</span>
               </template>
               <template v-slot:item.publicationDate="{ item }">
-                <span v-if="item.publicationDate">{{ item.publicationDate }}</span>
+                <span v-if="item.publicationDate">{{ formatDate(item.publicationDate) }}</span>
                 <span v-else>Sin publicar</span>
               </template>
               <template v-slot:item.actions="{ item }">
@@ -180,6 +180,9 @@ export default {
     },
     showPost(post) {
       this.$router.push({ name: 'postShow', params: { id: post.id } });
+    },
+    formatDate(date) {
+      return this.$moment(date).format('DD-MM-YYYY');
     },
   },
 };
