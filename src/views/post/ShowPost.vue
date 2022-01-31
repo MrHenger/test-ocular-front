@@ -5,6 +5,9 @@
         <v-card>
           <v-container>
             <v-row class="px-6 py-8">
+              <a @click="backDashboard()" v-if="isAuth"
+                ><v-icon>mdi-arrow-left</v-icon> volver al dashboar</a
+              >
               <v-col cols="12" class="pb-0">
                 <span class="font-weight-bold text-h3">{{ post.title }}</span>
               </v-col>
@@ -45,9 +48,19 @@ export default {
     ...mapState('post', {
       post: (state) => state.post,
     }),
+    isAuth() {
+      if (localStorage.getItem('token')) {
+        console.log(this.authme, 'xddd');
+        return true;
+      }
+      return false;
+    },
   },
   methods: {
     ...mapActions('post', ['getPost']),
+    backDashboard() {
+      this.$router.push({ name: 'adminPost' });
+    },
   },
 };
 </script>
