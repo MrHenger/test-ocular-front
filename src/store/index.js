@@ -20,7 +20,6 @@ export default new Vuex.Store({
         .get('/authme')
         .then((res) => {
           if (res.status == 200) {
-            console.log(res.data);
             contex.commit('setAuthme', res.data);
           }
         })

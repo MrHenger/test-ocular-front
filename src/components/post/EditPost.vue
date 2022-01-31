@@ -150,9 +150,10 @@ export default {
         });
     },
     saveData() {
-      console.log(this.data);
+      const data = this.createFormData();
+      const headers = { 'Content-Type': 'multipart/form-data' };
       this.$axios
-        .post(`/admin/post/${this.data.id}`, this.data)
+        .post(`/admin/post/${this.data.id}`, data, { headers })
         .then((res) => {
           if (res.status == 201) {
             if (res.status == 201) {
@@ -182,6 +183,18 @@ export default {
             showCloseButton: true,
           });
         });
+    },
+    createFormData() {
+      const formData = new FormData();
+      if (this.data.image != null) {
+        formData.append('image', this.data.image);
+      }
+      formData.append('title', this.data.title);
+      formData.append('slug', this.data.slug);
+      formData.append('body', this.data.body);
+      formData.append('enabled', this.data.enabled);
+      formData.append('category_id', this.data.category_id);
+      return formData;
     },
   },
 };
