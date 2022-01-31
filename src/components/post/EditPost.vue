@@ -81,6 +81,7 @@
               </v-col>
               <v-col cols="3">
                 <v-btn
+                  :loading="loadingBtn"
                   :disabled="invalid"
                   class="py-6"
                   block
@@ -115,6 +116,7 @@ export default {
         category_id: null,
       },
       categories: [],
+      loadingBtn: false,
     };
   },
   watch: {
@@ -152,6 +154,7 @@ export default {
     saveData() {
       const data = this.createFormData();
       const headers = { 'Content-Type': 'multipart/form-data' };
+      this.loadingBtn = true;
       this.$axios
         .post(`/admin/post/${this.data.id}`, data, { headers })
         .then((res) => {
@@ -182,6 +185,9 @@ export default {
             toast: true,
             showCloseButton: true,
           });
+        })
+        .finally(() => {
+          this.loadingBtn = false;
         });
     },
     createFormData() {

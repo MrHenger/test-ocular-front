@@ -9,6 +9,9 @@
           <span class="font-weight-bold text-h4">Listado de publicaciones</span>
         </div>
         <v-row class="d-flex justify-center px-10">
+          <v-col cols="12" class="d-flex justify-end">
+            <v-btn outlined @click="toCreate()"><span>+ Crear Publicacion</span></v-btn>
+          </v-col>
           <v-col>
             <v-data-table
               :headers="headers"
@@ -183,6 +186,9 @@ export default {
     },
     formatDate(date) {
       return this.$moment(date).format('DD-MM-YYYY');
+    },
+    toCreate() {
+      this.$router.push({ name: 'createPost' });
     },
   },
 };

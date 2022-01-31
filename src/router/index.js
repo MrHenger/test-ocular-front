@@ -39,6 +39,16 @@ const routes = [
     name: 'postShow',
     component: () => import('../views/post/ShowPost.vue'),
   },
+  {
+    path: '/admin/post/create',
+    name: 'createPost',
+    component: () => import('../views/admin/post/Create.vue'),
+    beforeEnter: (to, from, next) => {
+      if (!localStorage.getItem('token')) {
+        return next({ name: 'login' });
+      } else next();
+    },
+  },
 ];
 
 const router = new VueRouter({
