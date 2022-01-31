@@ -28,6 +28,11 @@ const routes = [
     path: '/admin/post',
     name: 'adminPost',
     component: () => import('../views/admin/post/List.vue'),
+    beforeEnter: (to, from, next) => {
+      if (!localStorage.getItem('token')) {
+        return next({ name: 'login' });
+      } else next();
+    },
   },
   {
     path: '/post/:id',
