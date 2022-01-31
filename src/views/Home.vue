@@ -1,15 +1,77 @@
 <template>
-  <hello-world />
+  <v-container>
+    <v-row>
+      <v-col>
+        <v-container>
+          <v-row>
+            <v-col cols="4" v-for="post in publicPosts" :key="post.id">
+              <v-card>
+                <v-row class="pb-4">
+                  <v-col cols="12" class="py-0">
+                    <v-img :src="post.image.fullPatch"></v-img>
+                  </v-col>
+                  <v-col cols="12" class="py-0">
+                    <v-card-title class="pb-0">
+                      <a @click="showPost(post.id)">{{ post.title }}</a>
+                    </v-card-title>
+                  </v-col>
+                  <v-col cols="12" class="py-0">
+                    <v-card-text class="pt-0">
+                      <span>Autor: </span>
+                      <span>{{ post.user.name }}</span>
+                    </v-card-text>
+                  </v-col>
+                  <v-col cols="12" class="pt-0">
+                    <v-card-text class="py-0">
+                      <span class="ellipsis">{{ post.body }}</span>
+                    </v-card-text>
+                  </v-col>
+                </v-row>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
-import HelloWorld from "../components/HelloWorld";
-
+import { mapActions, mapState } from 'vuex';
 export default {
-  name: "Home",
-
-  components: {
-    HelloWorld,
+  data() {
+    return {};
+  },
+  created() {
+    this.getPublicPosts(1);
+  },
+  computed: {
+    ...mapState('post', {
+      publicPosts: (state) => state.publicPosts,
+    }),
+  },
+  methods: {
+    ...mapActions('post', ['getPublicPosts']),
+    showPost(id) {
+      this.$router.push({ name: 'postShow', params: { id } });
+    },
   },
 };
 </script>
+
+<style scoped>
+.ellipsis {
+  /* Ellipsis of 4 lines */
+  display: block;
+  display: -webkit-box;
+  max-width: 100%;
+  height: 57px;
+  margin: 0 auto;
+  font-size: 14px;
+  line-height: 1;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+</style>
