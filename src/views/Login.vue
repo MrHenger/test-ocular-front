@@ -38,17 +38,19 @@
                         required
                         type="password"
                         :error-messages="errors[0]"
+                        @keyup.enter.native="submit()"
                       ></v-text-field>
                     </ValidationProvider>
                   </v-col>
 
                   <v-col cols="10" class="d-flex justify-center pb-10">
                     <v-btn
+                      :loading="loadingButton"
                       :disabled="invalid"
                       block
                       class="py-6"
                       color="blue darken-4"
-                      @click.prevent="subimit()"
+                      @click.prevent="submit()"
                     >
                       <span class="white--text">Iniciar sesión</span>
                     </v-btn>
@@ -69,6 +71,8 @@
 </template>
 
 <script>
+import Swal from 'sweetalert2';
+
 export default {
   data() {
     return {
@@ -80,15 +84,33 @@ export default {
     };
   },
   methods: {
-    subimit() {
+    submit() {
       this.loadingButton = true;
       this.$axios
         .post('http://127.0.0.1:8000/api/login', this.data)
         .then((res) => {
           localStorage.setItem('token', res.data.token);
+          const token = localStorage.getItem('token');
+          this.$axios.defaults.headers.Authorization = `Bearer ${token}`;
+          this.$router.push({ name: 'adminPost' });
         })
         .catch((error) => {
-          console.log(error);
+          let message;
+          if (error.response.status === 422) {
+            message = error.response.data.message;
+          } else {
+            message = 'Ha ocurrido un error inesperado';
+          }
+          Swal.fire({
+            icon: 'error',
+            title: message,
+            showConfirmButton: false,
+            timer: 5000,
+            position: 'bottom-end',
+            timerProgressBar: true,
+            toast: true,
+            showCloseButton: true,
+          });
         })
         .finally(() => {
           this.loadingButton = false;
