@@ -23,7 +23,7 @@
               </v-col>
               <v-col cols="12" class="pt-1">
                 <span>Publicado el </span>
-                <span>{{ post.publicationDate }}</span>
+                <span>{{ formatDate(post.publicationDate) }}</span>
                 <v-divider vertical class="mx-2"></v-divider>
                 <span>Categoria: </span>
                 <span>{{ post.category.name }}</span>
@@ -81,6 +81,9 @@ export default {
         .catch((error) => {
           console.log(error);
         });
+    },
+    formatDate(date) {
+      return this.$moment(date).format('DD-MM-YYYY');
     },
   },
 };
