@@ -1,44 +1,52 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-col>
-        <v-container>
-          <v-row>
-            <v-col cols="4" v-for="post in publicPosts" :key="post.id">
-              <v-card>
-                <v-row class="pb-4">
-                  <v-col cols="12" class="py-0">
-                    <v-img :src="post.image.fullPatch"></v-img>
-                  </v-col>
-                  <v-col cols="12" class="py-0">
-                    <v-card-title class="pb-0">
-                      <a @click="showPost(post.id)">{{ post.title }}</a>
-                    </v-card-title>
-                  </v-col>
-                  <v-col cols="12" class="py-0">
-                    <v-card-text class="pt-0">
-                      <span>Autor: </span>
-                      <span>{{ post.user.name }}</span>
-                    </v-card-text>
-                  </v-col>
-                  <v-col cols="12" class="pt-0">
-                    <v-card-text class="py-0">
-                      <span class="ellipsis">{{ post.body }}</span>
-                    </v-card-text>
-                  </v-col>
-                </v-row>
-              </v-card>
-            </v-col>
-          </v-row>
-        </v-container>
-      </v-col>
-    </v-row>
-  </v-container>
+  <div>
+    <nav-bar></nav-bar>
+    <v-container>
+      <v-row>
+        <v-col>
+          <v-container>
+            <v-row>
+              <v-col cols="4" class="mb-6" v-for="post in publicPosts" :key="post.id">
+                <v-card>
+                  <v-row class="pb-4">
+                    <v-col cols="12" class="py-0">
+                      <v-img :src="post.image.fullPatch"></v-img>
+                    </v-col>
+                    <v-col cols="12" class="py-0">
+                      <v-card-title class="pb-0">
+                        <a @click="showPost(post.id)">{{ post.title }}</a>
+                      </v-card-title>
+                    </v-col>
+                    <v-col cols="12" class="py-0">
+                      <v-card-text class="pt-0">
+                        <span>Autor: </span>
+                        <span>{{ post.user.name }}</span>
+                      </v-card-text>
+                    </v-col>
+                    <v-col cols="12" class="pt-0">
+                      <v-card-text class="py-0">
+                        <span class="ellipsis">{{ post.body }}</span>
+                      </v-card-text>
+                    </v-col>
+                  </v-row>
+                </v-card>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-col>
+      </v-row>
+    </v-container>
+  </div>
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex';
+import NavBar from '../components/layouts/NavBar.vue';
+
 export default {
+  components: {
+    NavBar,
+  },
   data() {
     return {};
   },
