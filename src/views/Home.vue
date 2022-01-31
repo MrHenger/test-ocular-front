@@ -34,13 +34,21 @@
             </v-row>
           </v-container>
         </v-col>
+        <v-col cols="12" class="d-flex justify-center text-right">
+          <v-pagination
+            v-model="page"
+            :total-visible="5"
+            @input="changePage()"
+            :length="paginate ? paginate.last_page : 1"
+          ></v-pagination>
+        </v-col>
       </v-row>
     </v-container>
   </div>
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex';
+import { mapActions, mapMutations, mapState } from 'vuex';
 import NavBar from '../components/layouts/NavBar.vue';
 
 export default {
@@ -48,7 +56,9 @@ export default {
     NavBar,
   },
   data() {
-    return {};
+    return {
+      page: 1,
+    };
   },
   created() {
     this.getPublicPosts(1);
@@ -57,11 +67,22 @@ export default {
     ...mapState('post', {
       publicPosts: (state) => state.publicPosts,
     }),
+    ...mapState('post', {
+      paginate: (state) => state.paginate,
+    }),
+    ...mapState('post', {
+      currentPage: (state) => state.page,
+    }),
   },
   methods: {
     ...mapActions('post', ['getPublicPosts']),
+    ...mapMutations('post', ['setPage']),
     showPost(id) {
       this.$router.push({ name: 'postShow', params: { id } });
+    },
+    changePage() {
+      this.setPage(this.page);
+      this.getPublicPosts(this.page);
     },
   },
 };
