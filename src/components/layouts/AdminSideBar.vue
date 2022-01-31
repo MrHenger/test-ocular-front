@@ -16,6 +16,9 @@
               <v-col cols="12" class="d-flex justify-center py-0">
                 <span class="white--text">{{ authme.email }}</span>
               </v-col>
+              <v-col cols="12" class="d-flex justify-center pb-0">
+                <v-btn outlined dark @click="logout()"><span>Logout</span></v-btn>
+              </v-col>
             </v-row>
           </v-container>
         </div>
@@ -47,7 +50,7 @@ export default {
       selectedItem: 0,
       items: [
         { text: 'Publicaciones', icon: 'mdi-post' },
-        { text: 'Categorias', icon: 'mdi-server' },
+        { text: 'Categorias', icon: 'mdi-layers-triple' },
       ],
     };
   },
@@ -59,6 +62,19 @@ export default {
   },
   methods: {
     ...mapActions(['getAuthme']),
+    logout() {
+      this.$axios
+        .post('/logout')
+        .then((res) => {
+          if (res.status == 200) {
+            localStorage.removeItem('token');
+            this.$router.push({ name: 'login' });
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
   },
 };
 </script>
