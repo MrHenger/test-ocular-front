@@ -9,7 +9,6 @@ export default {
     paginate: {},
     page: 1,
     loading: false,
-    post: {},
     publicPosts: [],
   }),
   mutations: {
@@ -25,9 +24,6 @@ export default {
     },
     setPage(state, page) {
       state.page = page;
-    },
-    setPost(state, data) {
-      state.post = data;
     },
     setPublicPosts(state, data) {
       state.publicPosts = data.data;
@@ -65,18 +61,6 @@ export default {
               showCloseButton: true,
             });
             contex.dispatch('getPosts');
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-    getPost(contex, id) {
-      axios
-        .get(`/post/${id}`)
-        .then((res) => {
-          if (res.status == 200) {
-            contex.commit('setPost', res.data.data);
           }
         })
         .catch((error) => {

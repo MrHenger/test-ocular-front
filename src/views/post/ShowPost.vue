@@ -36,30 +36,38 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex';
 export default {
   data() {
-    return {};
+    return {
+      post: {},
+    };
   },
   created() {
     this.getPost(this.$route.params.id);
   },
   computed: {
-    ...mapState('post', {
-      post: (state) => state.post,
-    }),
     isAuth() {
       if (localStorage.getItem('token')) {
-        console.log(this.authme, 'xddd');
         return true;
       }
       return false;
     },
   },
   methods: {
-    ...mapActions('post', ['getPost']),
     backDashboard() {
       this.$router.push({ name: 'adminPost' });
+    },
+    getPost(id) {
+      this.$axios
+        .get(`/post/${id}`)
+        .then((res) => {
+          if (res.status == 200) {
+            this.post = res.data.data;
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
   },
 };
